@@ -121,51 +121,53 @@ class _CategoryScreenState extends State<CategoryScreen> {
               const SizedBox(
                 height: 20,
               ),
-            searchResults.isEmpty ?  SizedBox(
-                height: MediaQuery.of(context).size.height - 120 - 100 - 10,
-                width: MediaQuery.of(context).size.width,
-                child: SvgPicture.string(noDataFound)
-              ) : 
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 120 - 100 - 10,
-                width: MediaQuery.of(context).size.width,
-                child: _loading
-                    ? Shimmer.fromColors(
-                        period: const Duration(seconds: 2),
-                        baseColor: Colors.grey.withOpacity(0.2),
-                        highlightColor: Colors.grey.withOpacity(0.4),
-                        child: GridView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 4 / 4.5,
-                            crossAxisSpacing: 18.0,
-                            mainAxisSpacing: 5.0,
-                          ),
-                          itemCount: 10,
-                          itemBuilder: (BuildContext context, int index) {
-                            return const CategoryCardShimmer();
-                          },
-                        ),
-                      )
-                    : GridView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 4 / 4.5,
-                          crossAxisSpacing: 18.0,
-                          mainAxisSpacing: 5.0,
-                        ),
-                        itemCount: _loading ? 10 : searchResults.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CategoryCard(
-                            category: searchResults[index],
-                          );
-                        },
-                      ),
-              )
+              searchResults.isEmpty && !_loading
+                  ? SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height - 120 - 100 - 10,
+                      width: MediaQuery.of(context).size.width,
+                      child: SvgPicture.string(noDataFound))
+                  : SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height - 120 - 100 - 10,
+                      width: MediaQuery.of(context).size.width,
+                      child: _loading
+                          ? Shimmer.fromColors(
+                              period: const Duration(seconds: 2),
+                              baseColor: Colors.grey.withOpacity(0.2),
+                              highlightColor: Colors.grey.withOpacity(0.4),
+                              child: GridView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 4 / 4.5,
+                                  crossAxisSpacing: 18.0,
+                                  mainAxisSpacing: 5.0,
+                                ),
+                                itemCount: 10,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return const CategoryCardShimmer();
+                                },
+                              ),
+                            )
+                          : GridView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 4 / 4.5,
+                                crossAxisSpacing: 18.0,
+                                mainAxisSpacing: 5.0,
+                              ),
+                              itemCount: _loading ? 10 : searchResults.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return CategoryCard(
+                                  category: searchResults[index],
+                                );
+                              },
+                            ),
+                    )
             ],
           ),
         ),
