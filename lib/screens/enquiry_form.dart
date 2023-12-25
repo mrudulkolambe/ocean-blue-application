@@ -183,6 +183,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.name,
                 controller: _namecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -242,6 +243,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 controller: _emailcontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -301,6 +303,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.phone,
                 controller: _phonecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -360,6 +363,7 @@ class _EnquiryFormState extends State<EnquiryForm> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.multiline,
                 controller: _messagecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,

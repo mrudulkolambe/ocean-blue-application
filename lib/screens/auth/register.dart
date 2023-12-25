@@ -110,6 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.name,
                 controller: _fullnamecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -169,6 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.name,
                 controller: _companynamecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -228,6 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.phone,
                 controller: _phonecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -287,6 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -346,6 +350,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.visiblePassword,
                 controller: _passwordController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,

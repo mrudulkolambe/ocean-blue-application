@@ -91,6 +91,7 @@ class _SPSFormState extends State<SPSForm> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.multiline,
                 controller: _messagecontroller,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,

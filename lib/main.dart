@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import 'package:ocean_blue/constants/api_routes.dart';
+import 'package:ocean_blue/constants/colors.dart';
 import 'package:ocean_blue/constants/home_svg.dart';
 import 'package:ocean_blue/controller/order.dart';
 import 'package:ocean_blue/controller/vendor.dart';
@@ -89,6 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.string(logo),
+            const SpinKitThreeBounce(color: blue,size: 20,)
           ],
         ),
       ),

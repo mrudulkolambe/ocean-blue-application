@@ -62,10 +62,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     request.body = json.encode({
       "fullname": _fullnamecontroller.text,
       "companyName": _companynamecontroller.text,
-      "email": "mrudul@gmail.com",
       "phoneNo": _phonecontroller.text,
-      "image":
-          "https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg"
     });
     request.headers.addAll(headers);
 
@@ -163,6 +160,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       height: 3,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.name,
                       controller: _fullnamecontroller,
                       style: GoogleFonts.montserrat(
                         fontSize: 14,
@@ -222,6 +220,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       height: 3,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.name,
                       controller: _companynamecontroller,
                       style: GoogleFonts.montserrat(
                         fontSize: 14,
@@ -281,6 +280,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       height: 3,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.phone,
                       controller: _phonecontroller,
                       style: GoogleFonts.montserrat(
                         fontSize: 14,
@@ -340,6 +340,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       height: 3,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       enabled: false,
                       controller: _emailcontroller,
                       style: GoogleFonts.montserrat(

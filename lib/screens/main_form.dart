@@ -104,15 +104,17 @@ class _MainFormState extends State<MainForm> {
       backgroundColor: Colors.white,
       bottomNavigationBar: const NavigationBarCustom(),
       body: SafeArea(
-        child: GetBuilder<OrderController>(
-            init: OrderController(),
-            builder: (ordercontroller) {
-              _modeltypecontroller.text =
-                  ordercontroller.orders.first.productId.category.name;
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ordercontroller.orders.isEmpty
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: GetBuilder<OrderController>(
+              init: OrderController(),
+              builder: (ordercontroller) {
+                if (orderController.orders.isNotEmpty) {
+                  _modeltypecontroller.text =
+                      ordercontroller.orders.first.productId.category.name;
+                }
+                return ordercontroller.orders.isEmpty
                     ? Center(
                         child: SvgPicture.string(noDataFound),
                       )
@@ -145,8 +147,8 @@ class _MainFormState extends State<MainForm> {
                                 value: orderID.isEmpty
                                     ? ordercontroller.orders.first.id
                                     : orderID,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20),
                                 hint: Text(
                                   "Select Order",
                                   style: GoogleFonts.poppins(
@@ -158,14 +160,15 @@ class _MainFormState extends State<MainForm> {
                                 onChanged: (String? value) {
                                   setState(() {
                                     orderID = value!;
-                                    _modeltypecontroller.text = ordercontroller
-                                        .orders
-                                        .where((element) => element.id == value)
-                                        .toList()
-                                        .first
-                                        .productId
-                                        .category
-                                        .name;
+                                    _modeltypecontroller.text =
+                                        ordercontroller.orders
+                                            .where((element) =>
+                                                element.id == value)
+                                            .toList()
+                                            .first
+                                            .productId
+                                            .category
+                                            .name;
                                   });
                                 },
                                 items: ordercontroller.orders
@@ -348,9 +351,9 @@ class _MainFormState extends State<MainForm> {
                             ),
                           ),
                         ],
-                      ),
-              );
-            }),
+                      );
+              }),
+        ),
       ),
     );
   }

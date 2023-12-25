@@ -159,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 8,
+                        height: 10,
                       ),
                       Row(
                         children: [
@@ -175,10 +175,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 8,
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.6,
+                      !loading && orders.isEmpty ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.47,
                         width: MediaQuery.of(context).size.width,
-                        child: loading
+                        child:  Center(
+                          child: Text("No Data Found", style: GoogleFonts.montserrat(),),
+                        )
+                      ) :
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.47,
+                        width: MediaQuery.of(context).size.width,
+                        child: loading 
                             ? Shimmer.fromColors(
                                 period: const Duration(seconds: 2),
                                 baseColor: Colors.grey.withOpacity(0.2),

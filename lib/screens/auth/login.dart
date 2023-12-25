@@ -100,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
@@ -159,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 3,
               ),
               TextFormField(
+                keyboardType: TextInputType.visiblePassword,
                 controller: _passwordController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
