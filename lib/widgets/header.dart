@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ocean_blue/controller/vendor.dart';
 import 'package:ocean_blue/screens/profile.dart';
 
 class Header extends StatefulWidget {
@@ -44,15 +45,19 @@ class _HeaderState extends State<Header> {
                 ),
               ],
             ),
-            GestureDetector(
-              onTap: () => Get.to(const ProfileScreen()),
-              child: const CircleAvatar(
-                backgroundImage: NetworkImage(
-                  "https://statusneo.com/wp-content/uploads/2023/02/MicrosoftTeams-image551ad57e01403f080a9df51975ac40b6efba82553c323a742b42b1c71c1e45f1.jpg",
-                ),
-                radius: 20,
-              ),
-            )
+            GetBuilder<VendorController>(
+                init: VendorController(),
+                builder: (controller) {
+                  return GestureDetector(
+                    onTap: () => Get.to(const ProfileScreen()),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        controller.vendor.image,
+                      ),
+                      radius: 20,
+                    ),
+                  );
+                })
           ],
         ),
       ),

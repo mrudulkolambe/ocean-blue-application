@@ -1,15 +1,24 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/home_svg.dart';
+import 'package:ocean_blue/controller/order.dart';
+import 'package:ocean_blue/controller/vendor.dart';
+import 'package:ocean_blue/models/orders.dart';
 import 'package:ocean_blue/screens/category.dart';
 import 'package:ocean_blue/screens/main_form.dart';
 import 'package:ocean_blue/screens/profile.dart';
 import 'package:ocean_blue/screens/sps_form.dart';
 import 'package:ocean_blue/widgets/bottomnavigationbar.dart';
 import 'package:ocean_blue/widgets/homescreen_tiles.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +28,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  OrderController orderController = Get.put(OrderController());
+  final _storage = GetStorage();
+  late Timer _timer;
+
+  void handlePreFetch() async {
+    final token = await _storage.read("token");
+    var orderResponse = await http.get(Uri.parse(getOrderByVendor),
+        headers: {"Authorization": "Bearer $token"});
+    if (orderResponse.statusCode == 200) {
+      var pastOrders = OrderResponse.fromJson(jsonDecode(orderResponse.body));
+      orderController.updateOrders(pastOrders.response);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    handlePreFetch();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      handlePreFetch();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,15 +78,19 @@ class _HomePageState extends State<HomePage> {
                     "assets/logo.png",
                     height: 40,
                   ),
-                  GestureDetector(
-                    onTap: () => Get.to(() => const ProfileScreen()),
-                    child: const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        "https://statusneo.com/wp-content/uploads/2023/02/MicrosoftTeams-image551ad57e01403f080a9df51975ac40b6efba82553c323a742b42b1c71c1e45f1.jpg",
-                      ),
-                      radius: 20,
-                    ),
-                  )
+                  GetBuilder<VendorController>(
+                      init: VendorController(),
+                      builder: (vendorcontroller) {
+                        return GestureDetector(
+                          onTap: () => Get.to(() => const ProfileScreen()),
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              vendorcontroller.vendor.image,
+                            ),
+                            radius: 20,
+                          ),
+                        );
+                      })
                 ],
               ),
               const SizedBox(
@@ -57,22 +99,27 @@ class _HomePageState extends State<HomePage> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black,
                       blurRadius: 10.0,
                       spreadRadius: -5,
-                      offset: Offset(0, 2),
+                      offset: Offset(0, 5),
                     ),
                   ],
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    "https://images.unsplash.com/photo-1593351415075-3bac9f45c877?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  child: Image.asset(
+                    "assets/launch.jpg",
                     height: 150,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
+                    frameBuilder: (BuildContext context, Widget child,
+                        int? frame, bool? wasSynchronouslyLoaded) {
+                      return child;
+                    },
                   ),
                 ),
               ),
@@ -108,7 +155,9 @@ class _HomePageState extends State<HomePage> {
                       HomeScreenTile(
                         icon: bookServiceSVG,
                         title: "Book a Service",
-                        action: () => Get.to(() => const MainForm(type: "service",)),
+                        action: () => Get.to(() => const MainForm(
+                              type: "service",
+                            )),
                       ),
                     ],
                   ),
@@ -120,7 +169,9 @@ class _HomePageState extends State<HomePage> {
                       HomeScreenTile(
                         icon: emergencySVG,
                         title: "Emergency",
-                        action: () => Get.to(() => const MainForm(type: "emergency",)),
+                        action: () => Get.to(() => const MainForm(
+                              type: "emergency",
+                            )),
                       ),
                       const SizedBox(
                         width: 25,
@@ -128,7 +179,9 @@ class _HomePageState extends State<HomePage> {
                       HomeScreenTile(
                         icon: resaleSVG,
                         title: "Resale Request",
-                        action: () => Get.to(() => const MainForm(type: "scrap",)),
+                        action: () => Get.to(() => const MainForm(
+                              type: "scrap",
+                            )),
                       ),
                     ],
                   ),

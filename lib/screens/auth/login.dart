@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
+import 'package:ocean_blue/models/Auth.dart';
 import 'package:ocean_blue/screens/auth/register.dart';
 import 'package:ocean_blue/screens/homepage.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +19,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _storage = GetStorage();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void signin() async {
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('POST', Uri.parse(vendorSignIn));
+    request.body = json.encode(
+        {"email": _emailController.text, "password": _passwordController.text});
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseString = await response.stream.bytesToString();
+      var data = AuthResponse.fromJson(jsonDecode(responseString));
+      _storage.write("token", data.response);
+      Get.to(() => const HomePage());
+    } else {
+      Get.snackbar("Error", response.reasonPhrase!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 3,
               ),
               TextFormField(
+                controller: _emailController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -130,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 3,
               ),
               TextFormField(
+                controller: _passwordController,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -173,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
               GestureDetector(
-                onTap: () => Get.to(() => const HomePage()),
+                onTap: signin,
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width,

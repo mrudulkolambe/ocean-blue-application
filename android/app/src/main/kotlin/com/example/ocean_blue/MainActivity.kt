@@ -1,4 +1,4 @@
-package com.example.ocean_blue
+package com.ocean_blue.application
 
 import io.flutter.embedding.android.FlutterActivity
 

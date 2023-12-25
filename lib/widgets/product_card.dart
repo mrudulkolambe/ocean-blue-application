@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ocean_blue/constants/colors.dart';
+import 'package:ocean_blue/models/product.dart';
 import 'package:ocean_blue/screens/product_details.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard({super.key});
+  final Product product;
+
+  const ProductCard({super.key, required this.product});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -15,26 +19,42 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => const ProductDetails()),
+      onTap: () => Get.to(
+        () => ProductDetails(
+          product: widget.product,
+        ),
+      ),
       child: Container(
         decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: 1,
-              color: Colors.black26,
-            ),
-          ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                "https://images.unsplash.com/photo-1517217004452-4ff260cb5598?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                widget.product.image,
                 height: 80,
                 width: 80,
                 fit: BoxFit.cover,
+                frameBuilder: (BuildContext context, Widget child, int? frame,
+                    bool? wasSynchronouslyLoaded) {
+                  return child;
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Shimmer.fromColors(
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.black26,
+                    child: Container(
+                      color: Colors.white,
+                      height: 80,
+                      width: 80,
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(
@@ -45,7 +65,7 @@ class _ProductCardState extends State<ProductCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "HDPE Boat",
+                  widget.product.name,
                   style: GoogleFonts.montserrat(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -57,7 +77,7 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 60 - 80,
                   child: Text(
-                    "HDPE Rescue boats have a double skin hull, manufactured by a rotational...",
+                    widget.product.description,
                     style: GoogleFonts.montserrat(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
@@ -77,7 +97,7 @@ class _ProductCardState extends State<ProductCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "Rs. 800",
+                        "Rs. ${widget.product.price}",
                         style: GoogleFonts.montserrat(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
