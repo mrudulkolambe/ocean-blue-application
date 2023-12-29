@@ -204,6 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return ProductCard(
                                     product: orders[index].productId,
+                                    enquire: false,
                                   );
                                 },
                               ),

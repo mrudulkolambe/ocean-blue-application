@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,10 +10,13 @@ import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
 import 'package:ocean_blue/controller/vendor.dart';
 import 'package:ocean_blue/models/Auth.dart';
+import 'package:ocean_blue/models/cloudinary_upload.dart';
 import 'package:ocean_blue/widgets/bottomnavigationbar.dart';
 import 'package:ocean_blue/widgets/customappbar.dart';
 import 'package:ocean_blue/widgets/customdialog.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -30,11 +34,72 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _emailcontroller = TextEditingController();
   VendorController vendorController = Get.put(VendorController());
   bool loading = false;
+  bool uploading = false;
+  String image = "";
 
   @override
   void initState() {
     super.initState();
     handlePreFetch();
+  }
+
+  Future<bool> requestGalleryPermission() async {
+    setState(() {
+      uploading = true;
+    });
+    if (await Permission.storage.request().isGranted) {
+      return true; // Permission already granted
+    } else {
+      var status = await Permission.storage.request();
+      if (status.isGranted) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  Future<void> uploadToCloudinary(File imageFile) async {
+    final url =
+        Uri.parse('https://api.cloudinary.com/v1_1/mrudul/image/upload');
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'cdlcdgtq'
+      ..files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+      var data = CloudinaryUpload.fromJson(jsonMap);
+      updateVendorProfile();
+      setState(() {
+        image = data.secureUrl;
+        uploading = false;
+      });
+    }
+  }
+
+  Future<void> getImage() async {
+    bool permissionGranted = await requestGalleryPermission();
+    if (permissionGranted) {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        uploadToCloudinary(File(image.path));
+      } else {
+        setState(() {
+          uploading = false;
+        });
+      }
+    } else {
+      setState(() {
+        uploading = false;
+      });
+      openAppSettings();
+      print('Permission to access gallery denied');
+    }
+
+    return null;
   }
 
   void handlePreFetch() async {
@@ -63,6 +128,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       "fullname": _fullnamecontroller.text,
       "companyName": _companynamecontroller.text,
       "phoneNo": _phonecontroller.text,
+      "image": image
     });
     request.headers.addAll(headers);
 
@@ -114,11 +180,30 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            controller.vendor.image,
-                          ),
-                          radius: 70,
+                        Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: getImage,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  controller.vendor.image,
+                                ),
+                                radius: 70,
+                              ),
+                            ),
+                            if (uploading)
+                              Container(
+                                height: 140,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(70),
+                                ),
+                                child: CircularProgressIndicator(
+                                  strokeCap: StrokeCap.butt,
+                                  color: blue,
+                                ),
+                              )
+                          ],
                         )
                       ],
                     ),

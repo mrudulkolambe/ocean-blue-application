@@ -1,5 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 
+import 'package:cloudinary_flutter/cloudinary_object.dart';
+import 'package:cloudinary_url_gen/config/cloudinary_config.dart';
+import 'package:cloudinary_url_gen/util/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,9 +20,13 @@ import 'package:ocean_blue/models/main.dart';
 import 'package:ocean_blue/screens/auth/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:ocean_blue/screens/homepage.dart';
+import 'package:cloudinary_flutter/cloudinary_context.dart';
+import 'package:cloudinary_flutter/image/cld_image.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
 
 void main() async {
   await GetStorage.init();
+CloudinaryContext.cloudinary = Cloudinary.fromCloudName(cloudName: "mrudul");
   runApp(const MyApp());
 }
 

@@ -9,8 +9,9 @@ import 'package:ocean_blue/widgets/customappbar.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
+  final bool enquire;
 
-  const ProductDetails({super.key, required this.product});
+  const ProductDetails({super.key, required this.product, required this.enquire});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -109,7 +110,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               const SizedBox(
                 height: 15,
               ),
-              GestureDetector(
+              if(widget.enquire) GestureDetector(
                 onTap: () => Get.to(() => EnquiryForm(
                       productID: widget.product.id,
                       productName: widget.product.name,

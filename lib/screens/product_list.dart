@@ -149,6 +149,7 @@ class _ProductListState extends State<ProductList> {
                               itemBuilder: (BuildContext context, int index) {
                                 return ProductCard(
                                   product: searchResults[index],
+                                  enquire: true,
                                 );
                               }),
                     ),

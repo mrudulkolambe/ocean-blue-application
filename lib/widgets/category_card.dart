@@ -32,7 +32,6 @@ class _CategoryCardState extends State<CategoryCard> {
                 widget.category.image,
                 height: 120,
                 fit: BoxFit.cover,
-                cacheHeight: 120,
                 frameBuilder: (BuildContext context, Widget child, int? frame,
                     bool? wasSynchronouslyLoaded) {
                   return child;

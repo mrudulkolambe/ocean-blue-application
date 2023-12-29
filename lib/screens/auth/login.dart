@@ -6,9 +6,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
+import 'package:ocean_blue/controller/vendor.dart';
 import 'package:ocean_blue/models/Auth.dart';
 import 'package:ocean_blue/screens/auth/register.dart';
-import 'package:ocean_blue/screens/homepage.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
@@ -20,8 +20,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _storage = GetStorage();
+  VendorController vendorController = Get.put(VendorController());
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
 
   void signin() async {
     var headers = {'Content-Type': 'application/json'};
@@ -35,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var responseString = await response.stream.bytesToString();
       var data = AuthResponse.fromJson(jsonDecode(responseString));
       _storage.write("token", data.response);
-      Get.to(() => const HomePage());
+      vendorController.isAuthed(false);
     } else {
       Get.snackbar("Error", response.reasonPhrase!);
     }

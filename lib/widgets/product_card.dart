@@ -8,8 +8,9 @@ import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
+  final bool enquire;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, required this.enquire});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -22,6 +23,7 @@ class _ProductCardState extends State<ProductCard> {
       onTap: () => Get.to(
         () => ProductDetails(
           product: widget.product,
+          enquire: widget.enquire,
         ),
       ),
       child: Container(
