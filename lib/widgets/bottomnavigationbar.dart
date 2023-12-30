@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:ocean_blue/screens/gallery.dart';
 import 'package:ocean_blue/screens/homepage.dart';
 import 'package:ocean_blue/screens/profile.dart';
 
@@ -28,7 +29,7 @@ class NavigationBarCustom extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 70.0),
+        padding: const EdgeInsets.symmetric(horizontal: 60.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -36,6 +37,13 @@ class NavigationBarCustom extends StatelessWidget {
               onTap: () => Get.to(() => const HomePage()),
               child: SvgPicture.string(
                 '<svg width="33" height="33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.591 28.56v-4.216a1.96 1.96 0 0 1 1.958-1.951h3.968c1.089 0 1.971.873 1.971 1.95v4.23c0 .911.734 1.656 1.654 1.677h2.645c2.637 0 4.776-2.116 4.776-4.727V13.527a3.354 3.354 0 0 0-1.323-2.62l-9.048-7.215a4.373 4.373 0 0 0-5.424 0L4.76 10.921a3.328 3.328 0 0 0-1.322 2.62v11.982c0 2.61 2.137 4.727 4.775 4.727h2.645c.943 0 1.707-.756 1.707-1.69" stroke="#0064FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                height: 30,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Get.to(() => const GalleryScreen()),
+              child: SvgPicture.string(
+                '<svg width="34" height="33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26.625 4.125H7.375a2.75 2.75 0 0 0-2.75 2.75v19.25a2.75 2.75 0 0 0 2.75 2.75h19.25a2.75 2.75 0 0 0 2.75-2.75V6.875a2.75 2.75 0 0 0-2.75-2.75Z" stroke="#0064FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.188 13.75a2.062 2.062 0 1 0 0-4.125 2.062 2.062 0 0 0 0 4.125ZM29.375 20.625 22.5 13.75 7.375 28.875" stroke="#0064FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
                 height: 30,
               ),
             ),

@@ -25,6 +25,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void signup() async {
+    if (_fullnamecontroller.text.length < 2 &&
+        _companynamecontroller.text.length < 2 &&
+        _emailController.text.length < 3 &&
+        _phonecontroller.text.length < 10) {
+      return;
+    } else if (_passwordController.text.length < 6) {
+      Get.snackbar("Error", "Password should be atleast 6 characters long");
+      return;
+    }
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse(vendorSignUp));
     request.body = json.encode({

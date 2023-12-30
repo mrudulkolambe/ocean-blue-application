@@ -29,3 +29,6 @@ const String createEmergencyApi = "$baseURL/emergency/create";
 
 // Resale
 const String createScrapApi = "$baseURL/scrap/create";
+
+// Gallery
+const String gallery = "$baseURL/gallery/";

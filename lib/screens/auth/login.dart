@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var responseString = await response.stream.bytesToString();
       var data = AuthResponse.fromJson(jsonDecode(responseString));
       _storage.write("token", data.response);
-      vendorController.isAuthed(false);
+      vendorController.isAuthed(true);
     } else {
       Get.snackbar("Error", response.reasonPhrase!);
     }
