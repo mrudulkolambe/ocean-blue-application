@@ -41,6 +41,7 @@ class CustomDialog extends StatelessWidget {
                   message,
                   style: GoogleFonts.poppins(
                     fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),

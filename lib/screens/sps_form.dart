@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
+import 'package:ocean_blue/models/form_response.dart';
 import 'package:ocean_blue/screens/homepage.dart';
 import 'package:ocean_blue/widgets/bottomnavigationbar.dart';
 import 'package:ocean_blue/widgets/customappbar.dart';
@@ -38,10 +39,12 @@ class _SPSFormState extends State<SPSForm> {
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
+        var responseData = await response.stream.bytesToString();
+        var data = SpsResponse.fromJson(jsonDecode(responseData));
         Get.dialog(
           CustomDialog(
             title: 'SPS submitted successfully',
-            message: "",
+            message: "Token: #${data.response.id.substring(18)}",
             buttonText: "Okay",
             method: () => Get.to(() => const HomePage()),
           ),

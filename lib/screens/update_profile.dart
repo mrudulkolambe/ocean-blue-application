@@ -96,7 +96,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         uploading = false;
       });
       openAppSettings();
-      print('Permission to access gallery denied');
+      Get.snackbar("Error", 'Permission to access gallery denied');
     }
 
     return null;

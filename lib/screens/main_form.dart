@@ -10,6 +10,7 @@ import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
 import 'package:ocean_blue/constants/svg/no_data.dart';
 import 'package:ocean_blue/controller/order.dart';
+import 'package:ocean_blue/models/form_response.dart';
 import 'package:ocean_blue/models/orders.dart';
 import 'package:ocean_blue/screens/homepage.dart';
 import 'package:ocean_blue/widgets/bottomnavigationbar.dart';
@@ -39,6 +40,7 @@ class _MainFormState extends State<MainForm> {
   void submitForm() async {
     if (orderID.isEmpty) {
       setState(() {
+        loading = true;
         orderID = orderController.orders.first.id;
       });
     }
@@ -63,6 +65,8 @@ class _MainFormState extends State<MainForm> {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+      var finalResponse = await response.stream.bytesToString();
+      var data = RequestResponse.fromJson(jsonDecode(finalResponse));
       Future.delayed(const Duration(seconds: 2));
       Get.dialog(CustomDialog(
         title: widget.type == "service"
@@ -70,13 +74,16 @@ class _MainFormState extends State<MainForm> {
             : widget.type == "emergency"
                 ? "Emergency Requested Successfully"
                 : "Scrap Request Successful",
-        message: "",
+        message: "Token: #${data.response.id.substring(18)}",
         method: () => Get.to(() => const HomePage()),
         buttonText: "Close",
       ));
     } else {
       Get.snackbar("Error", response.reasonPhrase!);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
