@@ -61,9 +61,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Future<void> uploadToCloudinary(File imageFile) async {
     final url =
-        Uri.parse('https://api.cloudinary.com/v1_1/mrudul/image/upload');
+        Uri.parse('https://api.cloudinary.com/v1_1/drqvunoh1/image/upload');
     final request = http.MultipartRequest('POST', url)
-      ..fields['upload_preset'] = 'cdlcdgtq'
+      ..fields['upload_preset'] = 'qffm3knk'
       ..files.add(await http.MultipartFile.fromPath('file', imageFile.path));
     final response = await request.send();
     if (response.statusCode == 200) {

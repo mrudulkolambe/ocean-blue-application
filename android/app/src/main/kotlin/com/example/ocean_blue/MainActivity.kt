@@ -1,4 +1,4 @@
-package com.ocean_blue.application
+package com.oceanblue.application
 
 import io.flutter.embedding.android.FlutterActivity
 
