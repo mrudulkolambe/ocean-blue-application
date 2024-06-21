@@ -12,14 +12,19 @@ import 'package:ocean_blue/constants/colors.dart';
 import 'package:ocean_blue/constants/home_svg.dart';
 import 'package:ocean_blue/controller/order.dart';
 import 'package:ocean_blue/controller/vendor.dart';
+import 'package:ocean_blue/firebase_options.dart';
 import 'package:ocean_blue/models/Auth.dart';
 import 'package:ocean_blue/models/main.dart';
 import 'package:ocean_blue/screens/auth/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:ocean_blue/screens/homepage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   await GetStorage.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -67,6 +72,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (token.toString() == "" || token == null) {
       Get.to(() => const LoginScreen());
     } else {
+      print(vendorProfileGet);
+      print(token);
       final response = await http.get(Uri.parse(vendorProfileGet),
           headers: {'Authorization': 'Bearer $token'});
       if (response.statusCode == 200) {

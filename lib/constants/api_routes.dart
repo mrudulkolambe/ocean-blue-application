@@ -5,6 +5,7 @@ const String vendorSignUp = "$baseURL/vendor/signup";
 const String vendorSignIn = "$baseURL/vendor/signin";
 const String vendorProfileUpdate = "$baseURL/vendor/update";
 const String vendorProfileGet = "$baseURL/vendor/get-profile";
+const String vendorLogout = "$baseURL/vendor/logout";
 
 // Category
 const String getAllCategories = "$baseURL/category";

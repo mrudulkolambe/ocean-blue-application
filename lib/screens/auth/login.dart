@@ -7,9 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ocean_blue/constants/api_routes.dart';
 import 'package:ocean_blue/constants/colors.dart';
 import 'package:ocean_blue/controller/vendor.dart';
+import 'package:ocean_blue/firebase/firebase_messaging.dart';
 import 'package:ocean_blue/models/Auth.dart';
 import 'package:ocean_blue/screens/auth/register.dart';
 import 'package:http/http.dart' as http;
+import 'package:ocean_blue/widgets/button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,16 +25,25 @@ class _LoginScreenState extends State<LoginScreen> {
   VendorController vendorController = Get.put(VendorController());
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  bool loading = false;
 
   void signin() async {
+    setState(() {
+      loading = true;
+    });
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse(vendorSignIn));
+    String? fcmtoken = await FirebaseMessagingAPI().initNotifications();
+    print(fcmtoken);
     request.body = json.encode(
-        {"email": _emailController.text, "password": _passwordController.text});
+      {
+        "email": _emailController.text,
+        "password": _passwordController.text,
+        'fcmtoken': fcmtoken
+      },
+    );
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var responseString = await response.stream.bytesToString();
       var data = AuthResponse.fromJson(jsonDecode(responseString));
@@ -41,6 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       Get.snackbar("Error", response.reasonPhrase!);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -206,27 +220,12 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 25,
               ),
-              GestureDetector(
-                onTap: signin,
-                child: Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: blue,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Login",
-                      style: GoogleFonts.quicksand(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              InkWell(
+                  onTap: signin,
+                  child: StyledButton(
+                    loading: loading,
+                    text: "Login",
+                  )),
               const SizedBox(
                 height: 20,
               ),

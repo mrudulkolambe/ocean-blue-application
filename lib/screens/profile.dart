@@ -84,8 +84,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               IconButton(
                   onPressed: () async {
-                    await _storage.remove("token");
-                    Get.to(() => const LoginScreen());
+                    final token = await _storage.read("token");
+                    final response =
+                        await http.patch(Uri.parse(vendorLogout), headers: {
+                      'Authorization': 'Bearer $token',
+                    });
+                    if (response.statusCode == 200) {
+                      await _storage.remove("token");
+                      Get.to(() => const LoginScreen());
+                    } else {
+                      Get.snackbar("Error", "Try again");
+                    }
                   },
                   icon: const Icon(Icons.logout))
             ],
@@ -175,40 +184,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 8,
                       ),
-                      !loading && orders.isEmpty ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.47,
-                        width: MediaQuery.of(context).size.width,
-                        child:  Center(
-                          child: Text("No Data Found", style: GoogleFonts.montserrat(),),
-                        )
-                      ) :
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.47,
-                        width: MediaQuery.of(context).size.width,
-                        child: loading 
-                            ? Shimmer.fromColors(
-                                period: const Duration(seconds: 2),
-                                baseColor: Colors.grey.withOpacity(0.2),
-                                highlightColor: Colors.grey.withOpacity(0.4),
-                                child: ListView.builder(
-                                    itemCount: 10,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return const ProductCardShimmer();
-                                    }),
-                              )
-                            : ListView.builder(
-                                itemCount: orders.length,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ProductCard(
-                                    product: orders[index].productId,
-                                    enquire: false,
-                                  );
-                                },
-                              ),
-                      ),
+                      !loading && orders.isEmpty
+                          ? SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.47,
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                child: Text(
+                                  "No Data Found",
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ))
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.47,
+                              width: MediaQuery.of(context).size.width,
+                              child: loading
+                                  ? Shimmer.fromColors(
+                                      period: const Duration(seconds: 2),
+                                      baseColor: Colors.grey.withOpacity(0.2),
+                                      highlightColor:
+                                          Colors.grey.withOpacity(0.4),
+                                      child: ListView.builder(
+                                          itemCount: 10,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return const ProductCardShimmer();
+                                          }),
+                                    )
+                                  : ListView.builder(
+                                      itemCount: orders.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return ProductCard(
+                                          product: orders[index].productId,
+                                          enquire: false,
+                                        );
+                                      },
+                                    ),
+                            ),
                     ],
                   ),
                 ),

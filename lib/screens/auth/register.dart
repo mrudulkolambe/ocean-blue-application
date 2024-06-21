@@ -23,6 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _fullnamecontroller = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool loading = false;
 
   void signup() async {
     if (_fullnamecontroller.text.length < 2 &&
@@ -34,6 +35,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Get.snackbar("Error", "Password should be atleast 6 characters long");
       return;
     }
+    setState(() {
+      loading = true;
+    });
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse(vendorSignUp));
     request.body = json.encode({
@@ -58,6 +62,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       Get.snackbar("Error", response.reasonPhrase!);
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -413,14 +420,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                    child: Text(
-                      "Create Account",
-                      style: GoogleFonts.quicksand(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: loading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeCap: StrokeCap.round,
+                            ),
+                          )
+                        : Text(
+                            "Create Account",
+                            style: GoogleFonts.quicksand(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
                 ),
               ),

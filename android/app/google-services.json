@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451073764534",
+    "project_id": "oceanblue-app",
+    "storage_bucket": "oceanblue-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451073764534:android:4ad70f9da78b9b706e8a17",
+        "android_client_info": {
+          "package_name": "com.oceanblue.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGQH9snOLdrH2I3Z_cxBeJuFoziQlWDwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
