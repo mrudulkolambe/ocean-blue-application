@@ -12,6 +12,12 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to select photos and videos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to take pictures and videos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to record audio for videos.</string>
 	<key>CFBundleName</key>
 	<string>ocean_blue</string>
 	<key>CFBundlePackageType</key>
@@ -28,6 +34,23 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<!-- Replace this value with your REVERSED_CLIENT_ID -->
+		<string>com.googleusercontent.apps.YOUR-REVERSED-CLIENT-ID</string>
+		</array>
+	</dict>
+	</array>
+	<key>GoogleService-Info</key>
+	<dict>
+	<key>CLIENT_ID</key>
+	<string>YOUR-REVERSED-CLIENT-ID</string>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
